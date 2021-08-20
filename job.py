@@ -19,7 +19,7 @@ INFO_CLEANUP = {
 class FetchAndSendTweetsJob(Job):
     # Twitter API rate limit parameters
     LIMIT_WINDOW = 15 * 60
-    LIMIT_COUNT = 300
+    LIMIT_COUNT = 3
     MIN_INTERVAL = 60
     TWEET_BATCH_INSERT_COUNT = 100
 
@@ -42,6 +42,7 @@ class FetchAndSendTweetsJob(Job):
         self._enabled = Event()
         self._enabled.set()
         self.logger = logging.getLogger(self.name)
+        self.logger.info("interval: %d", self.interval)
 
     def run(self, bot):
         self.logger.debug("Fetching tweets...")
@@ -176,7 +177,11 @@ class FetchAndSendTweetsJob(Job):
                                     .where(Tweet.tw_id > s.last_tweet_id)
                                     .order_by(Tweet.tw_id.asc())
                            ):
-                    bot.send_tweet(s.tg_chat, tw)
+                    keywords = ("bitcoin", "btc", "coin", "xmr", "monero", "rune", "thorchain", "crypto", "crash")
+                    for kw in keywords:
+                        if kw.lower() in tw.text.lower():
+                            bot.send_tweet(s.tg_chat, tw)
+                            break
 
                 # save the latest tweet sent on this subscription
                 s.last_tweet_id = s.tw_user.last_tweet_id

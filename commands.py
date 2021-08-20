@@ -31,14 +31,13 @@ def cmd_help(bot, update, chat=None):
         bot.reply(update, """
 Hello! This bot forwards you updates from twitter streams!
 Here's the commands:
+- /keywords - list keywords for filtering (setting keywords does not work yet)
 - /sub - subscribes to updates from users
 - /unsub - unsubscribes from users
 - /list  - lists current subscriptions
 - /export - sends you a /sub command that contains all current subscriptions
 - /all - shows you the latest tweets from all subscriptions
 - /wipe - remove all the data about you and your subscriptions
-- /auth - start Twitter authorization process
-- /verify - send Twitter verifier code to complete authorization process
 - /export\_friends - generate /sub command to subscribe to all your Twitter friends (authorization required)
 - /set\_timezone - set your [timezone name]({}) (for example Asia/Tokyo)
 - /source - info about source code
@@ -304,3 +303,17 @@ def cmd_set_timezone(bot, update, args, chat):
 @with_touched_chat
 def handle_chat(bot, update, chat=None):
     bot.reply(update, "Hey! Use commands to talk with me, please! See /help")
+
+
+@with_touched_chat
+def cmd_keywords(bot, update, args, chat=None):
+    if len(args) > 1:
+        #bot.reply(update,
+        #    "No keywords given! Please give comma-separated list of keywords for filtering.",
+        #    parse_mode=telegram.ParseMode.MARKDOWN)
+        #return
+        
+        #chat.__dict__["keywords"] = args
+        print("chat", chat)
+        
+    #bot.reply(update, "keywords: %s" % " ".join(chat.keywords))
